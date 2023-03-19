@@ -1,0 +1,76 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isSubPath(ListNode head, TreeNode root) {
+       // dfs with dfs 
+        
+        return helper(head, root);
+    }
+    // implementing dfs with dfs 
+    
+    // first dfs which checks from every node in the binary tree 
+    public boolean helper(ListNode head, TreeNode root)
+    {
+        if(root ==null)
+            return false;
+        if(dfs(head, root))
+        {
+            return true;
+        }
+        // if condns for if we get true then directly return true, no need to check more 
+        if(helper(head, root.left))
+            return true;
+          
+        
+        if(helper(head, root.right))
+            return true;
+        
+        return false;
+    }
+    
+    // second dfs which looks for the linked list 
+    public boolean dfs(ListNode head, TreeNode root)
+    {
+        // if we reach the end of linked list return true 
+        if(head ==null)
+            return true;
+        
+        // return statement -> if linked list val doesnt match the binary tree node value 
+        if(root==null ||  head.val != root.val)
+            return false;
+        
+        // return true when got true 
+        if(dfs(head.next, root.left))
+            return true;
+        
+        if(dfs(head.next, root.right))
+            return true;
+        
+        return false;
+        
+        
+    }
+}
