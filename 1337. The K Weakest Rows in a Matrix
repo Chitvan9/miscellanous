@@ -1,0 +1,53 @@
+class Solution {
+    public int countSoldier(int[] arr){
+        int low = 0, high = arr.length-1, mid;
+        while(low<=high){
+            mid = low + (high-low)/2;
+            if(arr[mid]==1){
+                low = mid+1;
+            }else{
+                high = mid-1;
+            }
+        }
+        return low;
+    }
+
+    class Pair{
+        int count;
+        int index;
+        Pair(int count, int index){
+            this.count = count;
+            this.index = index;
+        }
+    }
+
+    class countComparator implements Comparator<Pair> {
+  
+    // override the compare() method
+    public int compare(Pair s1, Pair s2)
+    {
+        if (s1.count == s2.count)
+            return 0;
+        else if (s1.count > s2.count)
+            return 1;
+        else
+            return -1;
+    }
+}
+
+    public int[] kWeakestRows(int[][] mat, int k) {
+        List<Pair> soldierCount= new ArrayList<>();
+
+        for(int i=0;i<mat.length;i++){
+            soldierCount.add(new Pair(countSoldier(mat[i]),i));
+        }
+
+        
+        Collections.sort(soldierCount,new countComparator());
+        int[] ans = new int[k];
+        for(int i=0;i<k;i++){
+            ans[i]=soldierCount.get(i).index;
+        }
+        return ans;
+    }
+}
