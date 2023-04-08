@@ -1,0 +1,47 @@
+class Solution {
+    //step 1
+    int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    int rows, cols;
+    public List<List<Integer>> pacificAtlantic(int[][] heights) {
+        //step 2
+        List<List<Integer>> res = new ArrayList<>();
+        //step 3
+        if (heights == null || heights.length == 0) return res;
+        //step 4
+        rows = heights.length; cols = heights[0].length;
+        //step 5
+        boolean[][] pacific = new boolean[rows][cols];
+        boolean[][] atlantic = new boolean[rows][cols];
+        //step 6
+        for (int k = 0; k < rows; k++) {
+            DFS(heights, k, 0, pacific, Integer.MIN_VALUE);
+            DFS(heights, k, cols - 1, atlantic, Integer.MIN_VALUE);
+        }
+        for (int j = 0; j < cols; j++) {
+            DFS(heights, 0, j, pacific, Integer.MIN_VALUE);
+            DFS(heights, rows - 1, j, atlantic, Integer.MIN_VALUE);
+        }
+        //step 11
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (pacific[r][c] && atlantic[r][c]) {
+                    res.add(Arrays.asList(r, c));
+                }
+            }
+        }
+        //step 12
+        return res;
+    }
+    //step 7
+    private void DFS(int[][] heights, int r, int c, boolean[][] visited, int prevHeight) {
+        //step 8
+        if (r < 0 || r >= rows || c < 0 || c >= cols 
+            || visited[r][c] || heights[r][c] < prevHeight) return;
+        //step 9
+        visited[r][c] = true;
+        //step 10
+        for (int[] dir : dirs) {
+            DFS(heights, r + dir[0], c + dir[1], visited, heights[r][c]);
+        }
+    }
+}
