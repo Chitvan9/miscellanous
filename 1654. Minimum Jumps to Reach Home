@@ -1,0 +1,51 @@
+class Solution {
+    class Node{
+        int val;
+        boolean isBackward;
+        public Node(int val,boolean isBackward){
+            this.val = val;
+            this.isBackward = isBackward;
+        }
+    } // we create a node to keep track of current processed element and isBackward boolean variable to keep track if current processed element was from a backward traversal 
+    public int minimumJumps(int[] forbidden, int a, int b, int x) {
+        Set<Integer> visited = new HashSet<>();
+        for(int seen : forbidden){
+            visited.add(seen);
+        }// we are not allowed to process elements in forbidden , so it behaves similar to visited elements 
+        Queue<Node> q = new LinkedList<>();
+        q.offer(new Node(0,false));
+        visited.add(0);
+        int level = 0;
+        int limit = 6000;
+        // limit should be the maximum limit a node value can go
+        // 6000 because 
+        // 2000 is the max value of x acc to constraint
+        // 2000 is the max value of a acc to constraint
+        // 2000 is the max value of b acc to constraint
+        while(!q.isEmpty()){
+            int size = q.size();
+            while(size-- > 0){
+                Node curr = q.remove();
+                if(curr.val == x){
+                    return level;
+                }// if current value is target , we return 
+                // for backward processing we check the current processed node has been from a backward proceeded node by checking isBackward , and we check if its non negative and if not already visisted we add in queue
+                if(!curr.isBackward){
+                    int nextBackPos = curr.val - b;
+                    if(nextBackPos > 0 && !visited.contains(nextBackPos)){
+                        q.offer(new Node(nextBackPos,true));
+                        visited.add(nextBackPos);
+                    }
+                } 
+                // for forward processing , we check if not visisted and we check if its withtin limits , bcos if it exceeds the limit it will cause TLE , the program never ends , so define a limit and if conditions satisfies we add in queue 
+                int nextForwardPos = curr.val + a;
+                if(nextForwardPos < limit && !visited.contains(nextForwardPos)){
+                    q.offer(new Node(nextForwardPos,false));
+                    visited.add(nextForwardPos);
+                }
+            }
+            level++;
+        }
+        return -1;
+    }
+}
