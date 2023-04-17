@@ -1,0 +1,30 @@
+class Solution {
+    public List<Integer> findSmallestSetOfVertices(int N, List<List<Integer>> edges) {
+        
+    List<Integer>ans=new ArrayList<>();
+    int[]st=new int[N];
+    int[]cont=new int[N];
+    
+    for(int i=0;i<edges.size();i++){
+
+    int n=edges.get(i).get(0);
+    int j=edges.get(i).get(1);
+
+    cont[j]=1;
+
+    if(cont[n]==0)st[n]=1;
+
+    st[j]=0;
+
+    }
+
+
+    for(int i=0;i<N;i++){
+        if(st[i]==1)ans.add(i);
+    }
+
+
+    return ans;
+
+    }
+}
