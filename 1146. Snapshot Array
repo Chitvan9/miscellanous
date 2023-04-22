@@ -1,36 +1,27 @@
 class SnapshotArray {
-    int len;
-    List<int[]> shot;
-    int[] list;
-    int snap_id;
-    int maxlen;
-    public SnapshotArray(int length) {
-        list = new int[length];
-        
-        shot = new ArrayList<>();
-        len = length;
-        snap_id = 0;
-        maxlen = 0;
-    }
     
-    public void set(int index, int val) {
-        if (index <len) {
-            list[index] = val;
-            maxlen = Math.max(maxlen, index);
+    List<TreeMap<Integer, Integer>> arr;
+    int currId = 0;
+
+    public SnapshotArray(int length) {
+        arr = new ArrayList();
+        
+        for (int i = 0; i < length; i++) {
+            arr.add(i, new TreeMap<Integer, Integer>());
+            arr.get(i).put(0, 0);
         }
     }
     
+    public void set(int index, int val) {
+        arr.get(index).put(currId, val);
+    }
+    
     public int snap() {
-        shot.add(Arrays.copyOf(list, maxlen+1));
-        snap_id++;
-        return snap_id-1;
+        return currId++;
     }
     
     public int get(int index, int snap_id) {
-        int[] shotArray = shot.get(snap_id);
-        if (index >= shotArray.length)
-            return 0;
-        return shotArray[index];
+        return arr.get(index).floorEntry(snap_id).getValue();
     }
 }
 
