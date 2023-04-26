@@ -1,0 +1,57 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    public List<TreeNode> generateTrees(int n) {
+        final int limit = n + 1; // upper bound, exclusive
+        TreeNodeList[][] memo = new TreeNodeList[limit + 1][limit + 1];
+        return generateTrees(1, limit, memo);
+    }
+
+    private TreeNodeList generateTrees(int low, int limit, TreeNodeList[][] memo) {
+        TreeNodeList cached = memo[low][limit];
+        if (cached != null) {
+            return cached;
+        }
+        TreeNodeList out = new TreeNodeList();
+        for (int r = low; r < limit; ++r) {
+            TreeNodeList leftNodes = generateTrees(low, r, memo);
+            TreeNodeList rightNodes = generateTrees(r + 1, limit, memo);
+            for (TreeNode left : leftNodes) {
+                for (TreeNode right : rightNodes) {
+                    TreeNode root = new TreeNode(r);
+                    root.left = left;
+                    root.right = right;
+                    out.add(root);
+                }
+            }
+        }
+        // Small correction: the list of all trees we can make without any values is [null],
+		// not [].  That is, if we have no node values, there is one possible tree: null.
+		// So we correct empty lists by making them lists of a single null element, instead.
+        // This makes looping and generating left and right children more straight-forward.
+        if (out.isEmpty()) {
+            out.add(null);
+        }
+        memo[low][limit] = out;
+        return out;
+    }
+
+    static class TreeNodeList extends ArrayList<TreeNode> {
+        // This class exists simply for the convenience of creating arrays without a type parameter.
+    }
+
+}
