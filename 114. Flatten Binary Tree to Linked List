@@ -1,0 +1,58 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    public void flatten(TreeNode root) {
+        
+        // Call flattenHelper to recursively flatten the binary tree.
+        flattenHelper(root);
+    }
+
+    private TreeNode flattenHelper(TreeNode root) {
+
+        if (root == null) {
+            // Base case: Return null if the current node is null.
+            return null;
+        }
+
+        // Recursively flatten the left and right subtrees of the current node.
+        TreeNode leftTail = flattenHelper(root.left);
+        TreeNode rightTail = flattenHelper(root.right);
+
+        if (leftTail != null) {
+            // If the left subtree is not null, append it to the right subtree of the current node.
+            // Set the right child of the left subtree's tail to the right subtree of the current node.
+            // Set the right child of the current node to the left subtree.
+            // Set the left child of the current node to null.
+            leftTail.right = root.right;
+            root.right = root.left;
+            root.left = null;
+        }
+
+        if (rightTail != null) {
+            // If the right subtree is not null, return its tail.
+            return rightTail;
+        }
+
+        if (leftTail != null) {
+            // If the right subtree is null but the left subtree is not null, return the tail of the left subtree.
+            return leftTail;
+        }
+
+        // If both the left and right subtrees are null, return the current node as the tail.
+        return root;
+    }
+}
