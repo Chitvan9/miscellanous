@@ -1,0 +1,19 @@
+class Solution {
+    public int minTimeToType(String word) {
+        int mid = 13;
+        int sec = 0;
+        char cur = 'a';
+        for(int m = 0; m < word.length(); m++){
+            int num = Math.abs(word.charAt(m) - cur);
+            if(num < 13)                
+                sec+=num;
+            else if(num >= 13)
+                sec = sec + 26 - num;
+				
+            cur = word.charAt(m);
+            sec++;
+        }
+        
+        return sec;
+    }
+}
