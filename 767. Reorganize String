@@ -1,0 +1,55 @@
+
+class Solution {
+
+    class Node implements Comparable<Node>
+    {
+        char ch;
+        int cnt;
+        Node(char c,int count)
+        {
+            ch=c;
+            cnt=count;
+        }
+        public int compareTo(Node nd)
+        {
+            return nd.cnt-this.cnt;
+        }
+
+
+    }
+
+    public String reorganizeString(String s) 
+    {
+
+        PriorityQueue<Node> pq=new PriorityQueue<>();
+        Map<Character,Integer> hm=new HashMap<>();
+    for(int i=0;i<s.length();i++)
+    {
+        char ch=s.charAt(i);
+        hm.put(ch,hm.getOrDefault(ch,0)+1);
+    }
+
+    for(char k:hm.keySet())
+    {
+        Node nd=new Node(k,hm.get(k));
+        pq.offer(nd);
+    }
+
+    StringBuilder sb=new StringBuilder("");
+    Node curr=new Node('#',0);
+    
+    while(pq.size()>0)
+    {
+        Node nd=pq.poll();
+        nd.cnt-=1;
+        sb.append(nd.ch);
+
+        if(curr.cnt>0)
+            pq.add(curr);
+
+         curr=nd;   
+    }
+    return sb.length()==s.length()?sb.toString():"";
+
+    }
+}
